@@ -25,15 +25,17 @@ const CardTodo = ({
   const { mutate: updateTodo } = trpc.useMutation("todos.update", {
     onMutate: (todo) => {
       trpcUtils.setQueryData(["todos.all"], (todos) => {
-        return todos?.map((t) => {
-          if (t.id === todo.id) {
-            return {
-              ...t,
-              completed: todo.completed,
+        return (
+          todos?.map((t) => {
+            if (t.id === todo.id) {
+              return {
+                ...t,
+                completed: todo.completed,
+              }
             }
-          }
-          return t
-        })!
+            return t
+          }) ?? []
+        )
       })
     },
     onSuccess: () => {
